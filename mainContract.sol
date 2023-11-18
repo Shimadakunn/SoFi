@@ -44,14 +44,6 @@ contract LoanContract is ERC1155Holder {
         interestRate = _interestRate;
     }
 
-    function getCollateralToken() external view returns (address) {
-        return address(collateralToken);
-    }
-
-    function getCollateralLens() external view returns (address) {
-        return address(collateralLens);
-    }
-
     function getLoanStatus(address borrower)
         external
         view
@@ -81,15 +73,15 @@ contract LoanContract is ERC1155Holder {
     function createLoan(uint256 _loanAmount, uint256 _collateralLensId)
         external
     {
-        /*require(_loanAmount > 0, "Loan amount must be greater than zero");
-        require(
+        require(_loanAmount > 0, "Loan amount must be greater than zero");
+        /*require(
             _loanAmount <= this.getAllowedCredit(_collateralLensId),
             "Loan amount must be greater than zero"
-        );
+        );*/
         require(
             loans[msg.sender].status != LoanStatus.Open,
             "Loan is already open"
-        );*/
+        );
 
         loans[msg.sender] = Loan({
             loanAmount: _loanAmount,
@@ -106,9 +98,11 @@ contract LoanContract is ERC1155Holder {
         );*/
 
         collateralToken.approve(msg.sender, _loanAmount);
-        collateralToken.transferFrom(address(this), msg.sender, _loanAmount);
+        collateralToken.transfer(msg.sender, _loanAmount);
 
         loanCounter++;
+
+        loans[msg.sender].status = LoanStatus.Open;
 
         emit LoanCreated(msg.sender, _loanAmount);
     }
@@ -118,7 +112,7 @@ contract LoanContract is ERC1155Holder {
         require(loan.status == LoanStatus.Open, "Loan is not open");
 
         require(
-            collateralToken.transfer(address(this), loan.loanAmount),
+            collateralToken.transferFrom(msg.sender, address(this), loan.loanAmount),
             "Repayment transfer failed"
         );
 
