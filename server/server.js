@@ -9,14 +9,21 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/get-data", async (req, res) => {
-  const response = await fetch('https://api.wiw.io/public/user/profile/name/nandy');
+  const address = req.query.address;
+  if(!address) return res.send({error: 'No address provided'})
+
+  const response = await fetch(`https://advanced-api.wiw.io/badges/address/${address}`,
+  {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'SiTjGCHbdACja4fzxFXGwebpZAaydJQT' // Ask WiW for a specific API key
+    }
+  });
   const data = await response.json();
-  const { partner_claims } = data;
-  const polygonID_badges = data.partner_claims.polygon_id.badges
-  console.log({data})
-  console.log({partner_claims})
-  console.log({polygonID_badges})
-  res.send(data);
+  const { badge_list } = data;
+  console.log({badge_list})
+  res.send({badge_list});
 });
 
 app.listen(3001);
