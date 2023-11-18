@@ -50,9 +50,17 @@ We have leveraged lens profiles and their on-chain interaction to efficiently va
 
 We have leveraged Aave V3 Lending & Borrowing technology stack to allow our users to efficiently borrow assets with their on-chain profiles.
 
+````
+Address: 0x80a8edca4F93ec506634F3D153FA32739b0251b9
+````
+
 **Spark** 
 
 Similarly to Aave, we also leverage Spark lending & borrowing functionalities for our application.
+
+````
+Address: 0x80a8edca4F93ec506634F3D153FA32739b0251b9
+````
 
 **WalletConnect**
 
@@ -65,4 +73,5 @@ Next ID from Mask Network facilitates the use of multiple off-chain social netwo
 ## Application Architecture
 
 Image <Here>
+
 
