@@ -1,4 +1,5 @@
 require("dotenv").config();
+const repudable_badges = require("./reputableBadges");
 const express = require("express");
 const app = express();
 
@@ -10,6 +11,7 @@ app.get("/", async (req, res) => {
 
 app.get("/get-data", async (req, res) => {
   const address = req.query.address;
+  const repudable_badges_holded = [];
   if(!address) return res.send({error: 'No address provided'})
 
   const response = await fetch(`https://advanced-api.wiw.io/badges/address/${address}`,
@@ -23,6 +25,14 @@ app.get("/get-data", async (req, res) => {
   const data = await response.json();
   const { badge_list } = data;
   console.log({badge_list})
+
+  for (badge of repudable_badges) {
+    if (badge_list.find(badge_holded => badge_holded.id === badge.id)) {
+      repudable_badges_holded.push(badge);
+    }
+  }
+  console.log({repudable_badges_holded})
+  
   res.send({badge_list});
 });
 
