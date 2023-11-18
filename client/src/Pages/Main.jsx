@@ -1,9 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import ProgressBar from "@ramonak/react-progress-bar";
 import React, { useState, useEffect } from 'react';
-import { render } from "react-dom";
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { motion } from "framer-motion"
 
 
 const Main = () => {
