@@ -72,10 +72,6 @@ Next ID from Mask Network facilitates the use of multiple off-chain social netwo
     
 ## Application Architecture
 
-![Banner](assets/Architecture_01.png)
-
-![Banner](assets/Architecture_02.png)
-
 ![Banner](assets/Architecture_03.png)
 
 ![Banner](assets/Architecture_04.png)
