@@ -10,6 +10,8 @@ Our appplication uses smart analytics to monitor blockchain activity, generating
 
 > This project has been built during ETH Global Istanbul 2023 Hackathon. More information [here](https://ethglobal.com/events/istanbul).
 
+You can find the demo video [here](youtube.com)
+
 ## Problem
 
 Current undercollateralized lending protocols struggle with effectiveness due to inadequate incentives for borrowers to ensure loan repayment. The rise of the creator economy and social finance initiatives, including on-chain social media and profiles like those offered by the Lens Protocol, signal a shift towards leveraging digital identity and reputation as potential solutions to this challenge.
