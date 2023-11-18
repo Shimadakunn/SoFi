@@ -13,6 +13,8 @@ Our appplication uses smart analytics to monitor blockchain activity, generating
 - Try the application for yourself here 👉 [Website](https://www.youtube.com/)
 - Watch the demo video here 👉 [video](https://www.youtube.com/)
 
+*The project has been deployed and has leveraged the solutions of the following sponsors: Aave, Spark, Arbitrum, Gnosis, *
+
 ## Problem
 
 Current undercollateralized lending protocols struggle with effectiveness due to inadequate incentives for borrowers to ensure loan repayment. The rise of the creator economy and social finance initiatives, including on-chain social media and profiles like those offered by the Lens Protocol, signal a shift towards leveraging digital identity and reputation as potential solutions to this challenge.
