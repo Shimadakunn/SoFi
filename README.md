@@ -57,6 +57,10 @@ Similarly to Aave, we also leverage Spark lending & borrowing functionalities fo
 **WalletConnect**
 
 **Push Protocol**
+
+**Mask Network**
+
+Next ID from Mask Network facilitates the use of multiple off-chain social network profiles, in conjunction with on-chain profiles, as collateral for borrowing.
     
 ## Application Architecture
 
