@@ -97,8 +97,8 @@ contract LoanContract is ERC1155Holder {
             ""
         );*/
 
-        collateralToken.approve(msg.sender, _loanAmount);
-        collateralToken.transfer(msg.sender, _loanAmount);
+        collateralToken.approve(msg.sender, _loanAmount * (10 ** 18));
+        collateralToken.transfer(msg.sender, _loanAmount * (10 ** 18));
 
         loanCounter++;
 
@@ -112,7 +112,11 @@ contract LoanContract is ERC1155Holder {
         require(loan.status == LoanStatus.Open, "Loan is not open");
 
         require(
-            collateralToken.transferFrom(msg.sender, address(this), loan.loanAmount),
+            collateralToken.transferFrom(
+                msg.sender,
+                address(this),
+                loan.loanAmount * (10 ** 18)
+            ),
             "Repayment transfer failed"
         );
 
@@ -129,6 +133,13 @@ contract LoanContract is ERC1155Holder {
         emit LoanRepaid(msg.sender, loan.loanAmount);
 
         delete loans[msg.sender];
+    }
+
+    function simulateInterests(address borrower) external {
+        require(loans[borrower].status == LoanStatus.Open, "Loan is not open");
+
+        uint256 interestAmount = (loans[borrower].loanAmount * interestRate) / 100;
+        loans[borrower].loanAmount += interestAmount;
     }
 
     function declareSoftDefault(address borrower) external {
