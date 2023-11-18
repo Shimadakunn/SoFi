@@ -39,18 +39,21 @@ Failure to repay the loan triggers a soft ban, imposing the following restrictio
 
 SoFiLend leverages the technologies of the following sponsors:
 
-- Lens Protocol 🌿
+**Lens Protocol 🌿**
+
 We have leveraged lens profiles and their on-chain interaction to efficiently value the credit score of the users.
 
-- Aave 👻
+**Aave 👻**
+
 We have leveraged Aave V3 Lending & Borrowing technology stack to allow our users to efficiently borrow assets with their on-chain profiles.
 
-- Spark 
+**Spark** 
+
 Similarly to Aave, we also leverage Spark lending & borrowing functionalities for our application.
 
-- WalletConnect
+**WalletConnect**
 
-- Push Protocol
+**Push Protocol**
     
 ## Application Architecture
 
