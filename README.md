@@ -72,10 +72,13 @@ Next ID from Mask Network facilitates the use of multiple off-chain social netwo
     
 ## Application Architecture
 
+*Social Credit Scoring*
 ![Banner](assets/Architecture_03.png)
 
+*On-Chain Reputation as Collateral*
 ![Banner](assets/Architecture_04.png)
 
+*Sybil Resistant Vouching System*
 ![Banner](assets/Architecture_05.png)
 
 
