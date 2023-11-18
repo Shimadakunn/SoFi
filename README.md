@@ -10,7 +10,8 @@ Our appplication uses smart analytics to monitor blockchain activity, generating
 
 > This project has been built during ETH Global Istanbul 2023 Hackathon. More information [here](https://ethglobal.com/events/istanbul).
 
-You can find the demo video [here](youtube.com)
+- Try the application for yourself here 👉 [Website](https://www.youtube.com/)
+- Watch the demo video here 👉 [video](https://www.youtube.com/)
 
 ## Problem
 
