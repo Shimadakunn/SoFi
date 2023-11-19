@@ -20,7 +20,7 @@ Aave, Spark, Arbitrum, Gnosis Chain, WalletConnect, Arbitrum, Mask Network, Lens
 
 Current undercollateralized lending protocols struggle with effectiveness due to inadequate incentives for borrowers to ensure loan repayment. The rise of the creator economy and social finance initiatives, including on-chain social media and profiles like those offered by the Lens Protocol, signal a shift towards leveraging digital identity and reputation as potential solutions to this challenge.
 
-## How does it work ?
+## How does it work
 
 ### Collateral Deposits: Social profiles
 
@@ -42,6 +42,18 @@ Failure to repay the loan triggers a soft ban, imposing the following restrictio
 
 
 ## Deployed on
+
+**Chilliz mainnet**
+````
+LoanContract : 0x9E7a4e8EF0A5F7949602e2Ff71dD0FFBC4F9Db91
+Asset. : 0xc81c0D879650a41d0C7A1ff588df7e11A5BFFeC4
+````
+
+**Gnosis Chain**
+````
+Main contract: 0x06a885610f0777c12125cba1470461cc4ca032af
+AssetProof: 0x6739e925c617FD8d72Ee9466439fFF7c0d5Bef8D
+````
 
 **Polygon ZkEvm Testnet:**
 ````
