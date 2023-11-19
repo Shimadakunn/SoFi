@@ -2,6 +2,7 @@ import ProgressBar from "@ramonak/react-progress-bar";
 import React, { useState, useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { ethers } from "ethers";
+import ABI from './Abi.js';
 
 import { bouncy } from "ldrs";
 
@@ -45,6 +46,21 @@ const Main = () => {
       setNumber(0);
     }
   }, [isConnected]);
+
+  async function borrow() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const contractAddress = '0x8C6Ed43671734a6D5D3e122894004dCBe1fCe8CE';
+    console.log("abi", ABI);
+    const contract = new ethers.Contract(contractAddress, ABI, signer);
+    try{
+      const response = await contract.createLoan(10,1);
+      setBorrowed(true)
+    }catch (err) {
+      console.log("Erreur lors du owner");
+    }
+  }
   return (
     <div className="flex items-center justify-center overflow-hidden">
       <img src="../bg.jpg" alt="main" className="scale-[150%] " />
@@ -68,7 +84,7 @@ const Main = () => {
       <div className="absolute h-[60vh] w-[60vw] bg-white/10 backdrop-blur-[4px] border border-gray-200 shadow-lg p-6 rounded-lg flex items-start justify-start space-y-4 divide-y divide-slate-700 flex-col">
         <div className="w-full flex items-center justify-around">
           <div>Assets</div>
-          <div>{popup ? "true" : "false"}</div>
+          <div>APY</div>
           <div>
             <div className="bg-transparent text-transparent rounded-lg px-4 py-2">
               Deposit
@@ -76,26 +92,14 @@ const Main = () => {
           </div>
         </div>
         <div className="w-full flex items-center justify-around pt-4">
-          <div>Assets</div>
-          <div>APY</div>
+          <div>DAI</div>
+          <div>3.2%</div>
           <div>
             <button
               className="bg-[#7b3fe4] text-white rounded-lg px-4 py-2"
               onClick={() => setPopup(true)}
             >
               Borrow
-            </button>
-          </div>
-        </div>
-        <div className="w-full flex items-center justify-around pt-4">
-          <div>Assets</div>
-          <div>APY</div>
-          <div>
-            <button
-              className="bg-[#7b3fe4] text-white rounded-lg px-4 py-2"
-              onClick={() => setPopup(true)}
-            >
-              Notif
             </button>
           </div>
         </div>
@@ -112,8 +116,8 @@ const Main = () => {
             <div className="h-[5vh] w-full flex items-center justify-center">
               Deposit Your Social Values
             </div>
-            <div className="h-[5vh] w-full rounded-lg pl-4 bg-[#ddcdff] flex items-center justify-start">
-              <div className="absolute right-10">ETH</div>
+            <div className="h-[5vh] w-[87%] rounded-lg pl-4 bg-[#ddcdff] flex items-center justify-start">
+              <div className="absolute right-[4rem]">ETH</div>
               {amount}
             </div>
             <div className="h-[40vh] border-2 border-gray-300 bg-gray-100 rounded-lg grid grid-cols-3 gap-4 p-4 drop-shadow-md">
@@ -123,18 +127,20 @@ const Main = () => {
                   identifier={identifier}
                   onSelect={handleSelectCard}
                   isSelected={selectedCards.includes(identifier)}
+                  myState={amount}
+                  setMyState={setAmount}
                 />
               ))}
             </div>
-            <div className="h-[5vh] w-full border-2 border-red-500 flex items-center justify-center">
+            <button className="h-[5vh] w-[87%] bg-[#7b3fe4] text-white rounded-lg px-4 py-2 flex items-center justify-center" onClick={borrow}>
               Borrow
-            </div>
+            </button>
           </div>
         </div>
       ) : null}
       {borrowed ? (
         <div className="absolute bottom-[80px] right-[45%] text-[#7b3fe4] font-black text-4xl z-0">
-          Borrowed : 0
+          Borrowed : {amount}
         </div>
       ) : null}
     </div>
@@ -142,9 +148,10 @@ const Main = () => {
 };
 export default Main;
 
-const Card = ({ identifier, onSelect, isSelected }) => {
+const Card = ({ identifier, onSelect, isSelected, myState, setMyState }) => {
   const handleClick = () => {
     onSelect(identifier);
+    setMyState(myState+10)
   };
   const [path, setPath] = useState("../ens.jpg");
   useEffect(() => {
