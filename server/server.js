@@ -2,12 +2,8 @@ require("dotenv").config();
 const repudable_badges = require("./reputableBadges");
 const express = require("express");
 const app = express();
-const { LensClient, production } = require("@lens-protocol/client");
 const getENSValuation = require("./ENSValuation");
-
-const lensClient = new LensClient({
-  environment: production
-});
+const getLensValuation = require("./getLensValuation");
 
 app.use(express.json());
 
@@ -41,65 +37,6 @@ app.get("/get-data", async (req, res) => {
   
   res.send({badge_list});
 });
-
-app.get('/check-lilgho-follow', async (req, res) => {
-  const lensClient = new LensClient({
-    environment: production
-  });
-
-  const profileByHandle = await lensClient.profile.fetch({
-    forHandle: "lens/lilgho",
-  })
-  
-  console.log(`Profile fetched by handle: `, {
-    id: profileByHandle.id,
-    handle: profileByHandle.handle,
-  })
-
-  const userHandel = 'lens/balakhonoff';
-
-  let isFollowedByStani = false;
-
-  let followings = [];
-  let i = 0;
-  let result;
-  while (i >= 0 ) {
-    if(i===0){
-      result = await lensClient.profile.followers({
-        of: profileByHandle.id,
-      });
-    }else{
-      result = await result.next();
-    }
-
-    const newFollowings = result.items.map((p) => {
-      if(p.handle === null){
-        i = -Infinity;
-        return [];
-      }
-      return p.handle.fullHandle;
-    });
-    followings = [...followings, ...newFollowings];
-    if(newFollowings.includes(userHandel)){
-      isFollowedByStani = true;
-      break;
-    }
-    console.log(
-      `#${i}`,
-      `Followers:`,
-      newFollowings
-    );
-    i++;
-  }
-
-  console.log({isFollowedByStani})
-
-  console.log({
-    followings: followings.sort(),
-  })
-  
-  res.send({ followings: followings.sort(), isFollowedByStani });
-})
 
 const check_ens_and_lens_ownership = async (address) => {
   if(!address) throw new Error('No address provided');
@@ -136,7 +73,13 @@ app.get('/get-address-max-borrow-amount', async (req, res) => {
     ens_valuation = getENSValuation(ens);
   }
 
+  if(have_lens){
+    lens_valuation = await getLensValuation(lens);
+  }
+
   const MAX_TVL_FACTOR = 0.7;
+
+  console.log({ens_valuation, lens_valuation})
 
   const maxBorrowAmount = MAX_TVL_FACTOR * (ens_valuation + lens_valuation);
   const send_data = {
