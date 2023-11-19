@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { ethers } from "ethers";
 import ABI from './Abi.js';
+import ABI2 from './Abi2.js';
 
 import { bouncy } from "ldrs";
 
@@ -103,6 +104,54 @@ const Main = () => {
             </button>
           </div>
         </div>
+        <div className="w-full flex items-center justify-around pt-4">
+          <div>ETH</div>
+          <div>1.8%</div>
+          <div>
+            <button
+              className="bg-[#7b3fe4] text-white rounded-lg px-4 py-2"
+              onClick={() => setPopup(true)}
+            >
+              Borrow
+            </button>
+          </div>
+        </div>
+        <div className="w-full flex items-center justify-around pt-4">
+          <div>MATIC</div>
+          <div>5.2%</div>
+          <div>
+            <button
+              className="bg-[#7b3fe4] text-white rounded-lg px-4 py-2"
+              onClick={() => setPopup(true)}
+            >
+              Borrow
+            </button>
+          </div>
+        </div>
+        <div className="w-full flex items-center justify-around pt-4">
+          <div>USDT</div>
+          <div>1.03%</div>
+          <div>
+            <button
+              className="bg-[#7b3fe4] text-white rounded-lg px-4 py-2"
+              onClick={() => setPopup(true)}
+            >
+              Borrow
+            </button>
+          </div>
+        </div>
+        <div className="w-full flex items-center justify-around pt-4">
+          <div>USDC</div>
+          <div>0.8%</div>
+          <div>
+            <button
+              className="bg-[#7b3fe4] text-white rounded-lg px-4 py-2"
+              onClick={() => setPopup(true)}
+            >
+              Borrow
+            </button>
+          </div>
+        </div>
       </div>
       {popup ? (
         <div className="absolute h-screen w-screen bg-white/10 backdrop-blur-[4px] flex items-center justify-center">
@@ -117,7 +166,7 @@ const Main = () => {
               Deposit Your Social Values
             </div>
             <div className="h-[5vh] w-[87%] rounded-lg pl-4 bg-[#ddcdff] flex items-center justify-start">
-              <div className="absolute right-[4rem]">ETH</div>
+              <div className="absolute right-[4rem]">DAI</div>
               {amount}
             </div>
             <div className="h-[40vh] border-2 border-gray-300 bg-gray-100 rounded-lg grid grid-cols-3 gap-4 p-4 drop-shadow-md">
@@ -149,7 +198,23 @@ const Main = () => {
 export default Main;
 
 const Card = ({ identifier, onSelect, isSelected, myState, setMyState }) => {
-  const handleClick = () => {
+  async function approve() {
+    try {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+
+      const contractAddress = '0xB0d4634025350Dd2A23a06c06B8AC20A1da9fC5c';
+      const contract = new ethers.Contract(contractAddress, ABI2, signer);
+      const tx = await contract.approve("0x8C6Ed43671734a6D5D3e122894004dCBe1fCe8CE", 2);
+      await tx.wait();
+      setTransactionHash(tx.hash);
+  } catch (error) {
+      console.error('Error:', error);
+  }
+  }
+  const handleClick = async () => {
+    // await approve();
     onSelect(identifier);
     setMyState(myState+10)
   };
@@ -280,7 +345,7 @@ const MaskButton = ({ pbk }) => {
           )}
         </>
       ) : (
-        <div className="z-10 absolute top-[-30px] left-[-53rem] h-[99vh] w-[100vw] bg-white/10 backdrop-blur-[4px] flex items-center justify-center">
+        <div className="z-10 absolute top-[-35px] left-[-55rem] h-[99vh] w-[100vw] bg-white/10 backdrop-blur-[4px] flex items-center justify-center">
           <button
             className="absolute top-[35px] left-[2.5%] w-[15px] h-[15px] flex items-center justify-center bg-white/10 backdrop-blur-[4px] border border-gray-200 shadow-lg p-6 rounded-full font-bold"
             onClick={() => setShowPopup(false)}
