@@ -83,6 +83,11 @@ const repudable_badges = [
         name: 'Advanced Governance Voter on Talent Protocol',
         id: 'd3d76eb62246b76f81313a6a1fb28af2de24b5f4c353387d67e8fa12074c1b13',
         points: 5
+    },
+    {
+        name: 'Early Adopter of Gho Token',
+        id: 'c3ad2d22748654978c6af324d2301a60b5f795c02f805d651edf6f8bf8bbdeec',
+        points: 2
     }
 ];
 
