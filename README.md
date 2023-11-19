@@ -26,7 +26,7 @@ Current undercollateralized lending protocols struggle with effectiveness due to
 
 Your Lens or ENS profiles are not just digital identities; they are tokens with inherent value based on your reputation within the ecosystem. 
 
-### Features?
+### Features
 
 - **Continued Access**: Even after depositing your Lens or ENS profiles as collateral, you maintain full access to these accounts.
 - **Repayment Notifications**: As the loan repayment date nears, you'll receive push notifications about your health factor and potential liquidation risks.
@@ -75,8 +75,14 @@ Loan Contract : Talked with Raza and couldn't deploy due to RPC problems
 
 **Celo**
 ````
-scroll asset: 0x0B15b524011cDF374B87Bd3ED0c844F8948B8608
+Asset: 0x0B15b524011cDF374B87Bd3ED0c844F8948B8608
 Loan Contract : 0xe8B3CB3BF75Ae25ec97942AaAce603590DE2b668
+````
+
+**Linea**
+````
+LoanContract : 0x9E7a4e8EF0A5F7949602e2Ff71dD0FFBC4F9Db91
+AssetProof : 0xc81c0D879650a41d0C7A1ff588df7e11A5BFFeC4
 ````
 
 ## Application Architecture
