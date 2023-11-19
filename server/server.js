@@ -4,38 +4,12 @@ const express = require("express");
 const app = express();
 const getENSValuation = require("./ENSValuation");
 const getLensValuation = require("./getLensValuation");
+const getReputableOnChainPoints = require("./getReputableOnChainPoints");
 
 app.use(express.json());
 
 app.get("/", async (req, res) => {
   res.send("Hello World!");
-});
-
-app.get("/get-data", async (req, res) => {
-  const address = req.query.address;
-  const repudable_badges_holded = [];
-  if(!address) return res.send({error: 'No address provided'})
-
-  const response = await fetch(`https://advanced-api.wiw.io/badges/address/${address}`,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'SiTjGCHbdACja4fzxFXGwebpZAaydJQT' // Ask WiW for a specific API key
-    }
-  });
-  const data = await response.json();
-  const { badge_list } = data;
-  console.log({badge_list})
-
-  for (badge of repudable_badges) {
-    if (badge_list.find(badge_holded => badge_holded.id === badge.id)) {
-      repudable_badges_holded.push(badge);
-    }
-  }
-  console.log({repudable_badges_holded})
-  
-  res.send({badge_list});
 });
 
 const check_ens_and_lens_ownership = async (address) => {
@@ -81,12 +55,22 @@ app.get('/get-address-max-borrow-amount', async (req, res) => {
 
   console.log({ens_valuation, lens_valuation})
 
-  const maxBorrowAmount = MAX_TVL_FACTOR * (ens_valuation + lens_valuation);
+  const MULTIPLICATOR = 1.5;
+
+  const maxReputableOnchainPoints = repudable_badges.reduce((acc, badge) => acc + badge.points, 0);
+  
+
+  const reputableOnChainPoints = await getReputableOnChainPoints(address);
+
+  console.log({maxReputableOnchainPoints, reputableOnChainPoints})
+
+  const maxBorrowAmount = MAX_TVL_FACTOR * ( (MULTIPLICATOR - 1) * (maxReputableOnchainPoints / reputableOnChainPoints) + (ens_valuation + lens_valuation) );
+
   const send_data = {
     maxBorrowAmount,
   }
 
-  console.log({send_data})
+  console.log(send_data)
   res.send(send_data);
 });
 
