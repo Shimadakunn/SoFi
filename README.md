@@ -70,6 +70,7 @@ AssetProof : 0xf5a672774a53872e7C6773Aa04F41a7F6c37e327
 **Scroll Asset**
 ````
 scroll asset: 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154
+Loan Contract : Talked with Raza and couldn't deploy due to RPC problems
 ````
 
 ## Application Architecture
