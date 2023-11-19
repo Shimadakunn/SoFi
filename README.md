@@ -73,6 +73,12 @@ scroll asset: 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154
 Loan Contract : Talked with Raza and couldn't deploy due to RPC problems
 ````
 
+**Celo**
+````
+scroll asset: 0x0B15b524011cDF374B87Bd3ED0c844F8948B8608
+Loan Contract : 0xe8B3CB3BF75Ae25ec97942AaAce603590DE2b668
+````
+
 ## Application Architecture
 
 *Social Credit Scoring*
