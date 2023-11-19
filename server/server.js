@@ -100,4 +100,26 @@ app.get('/check-lilgho-follow', async (req, res) => {
   res.send({ followings: followings.sort(), isFollowedByStani });
 })
 
+app.get('/check-ens-and-ens-profile-ownership', async (req, res) => {
+  const { address } = req.query;
+  if(!address) return res.send({error: 'No address provided'})
+
+  const response = await fetch(`https://api.web3.bio/profile/${address}`);
+
+  const data = await response.json();
+  const ens = data.filter((d) => d.platform === "ENS");
+  const lens = data.filter((d) => d.platform === "lens");
+  const have_ens = ens.length > 0;
+  const have_lens = lens.length > 0;
+  const send_data = {
+    have_ens,
+    have_lens,
+    ens: have_ens ? ens[0].identity : null,
+    lens: have_lens ? lens[0].identity : null,
+  }
+
+  console.log({send_data})
+  res.send(send_data);
+})
+
 app.listen(3001);
