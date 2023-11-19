@@ -2,13 +2,13 @@
 pragma solidity ^0.8.0;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/IERC20.sol";
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/IERC1155.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/IERC721.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 
 contract LoanContract is ERC1155Holder {
     address public owner;
     IERC20 public collateralToken;
-    IERC1155 public collateralLens;
+    IERC721 public collateralAsset;
     uint256 public interestRate;
 
     enum LoanStatus {
@@ -21,7 +21,7 @@ contract LoanContract is ERC1155Holder {
 
     struct Loan {
         uint256 loanAmount;
-        uint256 collateralLensId;
+        uint256 collateralAssetId;
         LoanStatus status;
     }
 
@@ -38,9 +38,9 @@ contract LoanContract is ERC1155Holder {
         collateralToken = IERC20(
             address(0xc8c0Cf9436F4862a8F60Ce680Ca5a9f0f99b5ded)
         ); // Token Address (DAI)
-        collateralLens = IERC1155(
-            address(0xDb46d1Dc155634FbC732f92E853b10B288AD5a1d)
-        ); // Lens Protocol Address
+        collateralAsset = IERC721(
+            address(0x2c1e1A063e92D4956621c4d33af5aD9E4c77840F)
+        );
         interestRate = _interestRate;
     }
 
@@ -61,7 +61,7 @@ contract LoanContract is ERC1155Holder {
         view
         returns (uint256)
     {
-        return loans[borrower].collateralLensId;
+        return loans[borrower].collateralAssetId;
     }
 
     function getAllowedCredit(
@@ -70,13 +70,13 @@ contract LoanContract is ERC1155Holder {
         return collateralTokenId + 1;
     }
 
-    function createLoan(uint256 _loanAmount, uint256 _collateralLensId)
+    function createLoan(uint256 _loanAmount, uint256 _collateralAssetId)
         external
     {
         require(_loanAmount > 0, "Loan amount must be greater than zero");
         /*require(
             _loanAmount <= this.getAllowedCredit(_collateralLensId),
-            "Loan amount must be greater than zero"
+            "Loan amount must be lower"
         );*/
         require(
             loans[msg.sender].status != LoanStatus.Open,
@@ -85,17 +85,9 @@ contract LoanContract is ERC1155Holder {
 
         loans[msg.sender] = Loan({
             loanAmount: _loanAmount,
-            collateralLensId: _collateralLensId,
+            collateralAssetId: _collateralAssetId,
             status: LoanStatus.Open
         });
-
-        /*collateralLens.safeTransferFrom(
-            msg.sender,
-            address(this),
-            _collateralLensId,
-            _loanAmount,
-            ""
-        );*/
 
         collateralToken.approve(msg.sender, _loanAmount * (10 ** 18));
         collateralToken.transfer(msg.sender, _loanAmount * (10 ** 18));
@@ -120,13 +112,11 @@ contract LoanContract is ERC1155Holder {
             "Repayment transfer failed"
         );
 
-        /*collateralLens.safeTransferFrom(
+        collateralAsset.safeTransferFrom(
             address(this),
             msg.sender,
-            loan.collateralLensId,
-            loan.loanAmount,
-            ""
-        );*/
+            loan.collateralAssetId
+        );
 
         loan.status = LoanStatus.Repaid;
 
@@ -162,7 +152,7 @@ contract LoanContract is ERC1155Holder {
         emit LoanDefaulted(borrower, loan.loanAmount);
     }
 
-    function redeemCollat(uint256 collateralLensId) external view {
+    function redeemCollat(uint256 collateralLensId) external {
         // need to delete view
         require(
             loans[msg.sender].status != LoanStatus.Open,
@@ -173,44 +163,31 @@ contract LoanContract is ERC1155Holder {
             "There is a defaulted loan"
         );
 
-        /*collateralLens.safeTransferFrom(
+        collateralAsset.safeTransferFrom(
             address(this),
-            owner,
-            collateralLensId,
-            loans[msg.sender].loanAmount,
-            ""
-        );*/
+            msg.sender,
+            collateralLensId
+        );
     }
 
-    function softLiquid() external {
-        Loan storage loan = loans[msg.sender];
-        //require(loan.status == LoanStatus.SoftDefaulted, "Loan is not soft defaulted");
+    function softLiquid(address borrower) external {
+        require(loans[borrower].status == LoanStatus.SoftDefaulted, "Loan is not soft defaulted");
 
-        /*collateralLens.safeTransferFrom(
-            address(this),
-            owner,
-            loan.collateralLensId,
-            loan.loanAmount,
-            ""
-        );*/
+        emit LoanSoftDefaulted(borrower, loans[borrower].loanAmount);
 
-        //event declare
-
-        delete loans[msg.sender];
+        delete loans[borrower];
     }
 
-    function hardLiquid() external {
-        Loan storage loan = loans[msg.sender];
+    function hardLiquid(address borrower) external {
+        Loan storage loan = loans[borrower];
         require(loan.status == LoanStatus.Defaulted, "Loan is not defaulted");
 
-        /*collateralLens.safeTransferFrom(
+        collateralAsset.safeTransferFrom(
             address(this),
             owner,
-            loan.collateralLensId,
-            loan.loanAmount,
-            ""
-        );*/
+            loan.collateralAssetId
+        );
 
-        delete loans[msg.sender];
+        delete loans[borrower];
     }
 }
