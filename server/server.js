@@ -2,11 +2,9 @@ require("dotenv").config();
 const repudable_badges = require("./reputableBadges");
 const express = require("express");
 const app = express();
-const { LensClient, production } = require("@lens-protocol/client");
-
-const lensClient = new LensClient({
-  environment: production
-});
+const getENSValuation = require("./ENSValuation");
+const getLensValuation = require("./getLensValuation");
+const getReputableOnChainPoints = require("./getReputableOnChainPoints");
 
 app.use(express.json());
 
@@ -14,95 +12,8 @@ app.get("/", async (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/get-data", async (req, res) => {
-  const address = req.query.address;
-  const repudable_badges_holded = [];
-  if(!address) return res.send({error: 'No address provided'})
-
-  const response = await fetch(`https://advanced-api.wiw.io/badges/address/${address}`,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'SiTjGCHbdACja4fzxFXGwebpZAaydJQT' // Ask WiW for a specific API key
-    }
-  });
-  const data = await response.json();
-  const { badge_list } = data;
-  console.log({badge_list})
-
-  for (badge of repudable_badges) {
-    if (badge_list.find(badge_holded => badge_holded.id === badge.id)) {
-      repudable_badges_holded.push(badge);
-    }
-  }
-  console.log({repudable_badges_holded})
-  
-  res.send({badge_list});
-});
-
-app.get('/check-lilgho-follow', async (req, res) => {
-  const lensClient = new LensClient({
-    environment: production
-  });
-
-  const profileByHandle = await lensClient.profile.fetch({
-    forHandle: "lens/lilgho",
-  })
-  
-  console.log(`Profile fetched by handle: `, {
-    id: profileByHandle.id,
-    handle: profileByHandle.handle,
-  })
-
-  const userHandel = 'lens/balakhonoff';
-
-  let isFollowedByStani = false;
-
-  let followings = [];
-  let i = 0;
-  let result;
-  while (i >= 0 ) {
-    if(i===0){
-      result = await lensClient.profile.followers({
-        of: profileByHandle.id,
-      });
-    }else{
-      result = await result.next();
-    }
-
-    const newFollowings = result.items.map((p) => {
-      if(p.handle === null){
-        i = -Infinity;
-        return [];
-      }
-      return p.handle.fullHandle;
-    });
-    followings = [...followings, ...newFollowings];
-    if(newFollowings.includes(userHandel)){
-      isFollowedByStani = true;
-      break;
-    }
-    console.log(
-      `#${i}`,
-      `Followers:`,
-      newFollowings
-    );
-    i++;
-  }
-
-  console.log({isFollowedByStani})
-
-  console.log({
-    followings: followings.sort(),
-  })
-  
-  res.send({ followings: followings.sort(), isFollowedByStani });
-})
-
-app.get('/check-ens-and-ens-profile-ownership', async (req, res) => {
-  const { address } = req.query;
-  if(!address) return res.send({error: 'No address provided'})
+const check_ens_and_lens_ownership = async (address) => {
+  if(!address) throw new Error('No address provided');
 
   const response = await fetch(`https://api.web3.bio/profile/${address}`);
 
@@ -118,8 +29,49 @@ app.get('/check-ens-and-ens-profile-ownership', async (req, res) => {
     lens: have_lens ? lens[0].identity : null,
   }
 
-  console.log({send_data})
+  return send_data;
+}
+
+app.get('/get-address-max-borrow-amount', async (req, res) => {
+  const { address } = req.query;
+  if(!address) return res.send({error: 'No address provided'})
+
+  console.log({address})
+
+  const { have_ens, have_lens, ens, lens} = await check_ens_and_lens_ownership(address);
+
+  let ens_valuation = 0;
+  let lens_valuation = 0;
+  
+  if(have_ens){
+    ens_valuation = getENSValuation(ens);
+  }
+
+  if(have_lens){
+    lens_valuation = await getLensValuation(lens);
+  }
+
+  const MAX_TVL_FACTOR = 0.7;
+
+  console.log({ens_valuation, lens_valuation})
+
+  const MULTIPLICATOR = 1.5;
+
+  const maxReputableOnchainPoints = repudable_badges.reduce((acc, badge) => acc + badge.points, 0);
+  
+
+  const reputableOnChainPoints = await getReputableOnChainPoints(address);
+
+  console.log({maxReputableOnchainPoints, reputableOnChainPoints})
+
+  const maxBorrowAmount = MAX_TVL_FACTOR * ( (MULTIPLICATOR - 1) * (maxReputableOnchainPoints / reputableOnChainPoints) + (ens_valuation + lens_valuation) );
+
+  const send_data = {
+    maxBorrowAmount,
+  }
+
+  console.log(send_data)
   res.send(send_data);
-})
+});
 
 app.listen(3001);
