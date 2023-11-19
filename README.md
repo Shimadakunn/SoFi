@@ -10,10 +10,11 @@ Our appplication uses smart analytics to monitor blockchain activity, generating
 
 > This project has been built during ETH Global Istanbul 2023 Hackathon. More information [here](https://ethglobal.com/events/istanbul).
 
-- Try the application for yourself here 👉 [Website](https://www.youtube.com/)
-- Watch the demo video here 👉 [video](https://www.youtube.com/)
+- Try the application for yourself here 👉 [website](https://so-fi-front.vercel.app/)
+- Watch the demo video and project page here 👉 [video](https://ethglobal.com/showcase/sofilend-fajeu)
 
-*The project has been deployed and has leveraged the solutions of the following sponsors: Aave, Spark, Arbitrum, Gnosis, *
+*The project has been deployed and has leveraged the solutions of the following sponsors: 
+Aave, Spark, Arbitrum, Gnosis Chain, WalletConnect, Arbitrum, Mask Network, Lens Protocol, Polygon, IPFS & Filecoin, Metamask, Chilliz, Scroll, Push Protocol, ENS, Celo, Mantle, Neon EVM, Ethereum Attestation Service, Nouns DAO*
 
 ## Problem
 
@@ -40,38 +41,25 @@ Failure to repay the loan triggers a soft ban, imposing the following restrictio
 - **Vouching Limit**: Restricts vouching capabilities (up to a maximum of 2 per wallet).
 
 
-## Technologies Used
+## Deployed on
 
-SoFiLend leverages the technologies of the following sponsors:
-
-**Lens Protocol 🌿**
-
-We have leveraged lens profiles and their on-chain interaction to efficiently value the credit score of the users.
-
-**Aave 👻**
-
-We have leveraged Aave V3 Lending & Borrowing technology stack to allow our users to efficiently borrow assets with their on-chain profiles.
-
+**Polygon ZkEvm Testnet:**
 ````
-Address: 0x80a8edca4F93ec506634F3D153FA32739b0251b9
+AssetProof: 0xdF139C6B1283514472Afc5d3e0A0D52b7f64f8Ed
+MainContract: 0x532E6Ce0763Da28346906E06C8C9922f3B5F479b
 ````
 
-**Spark** 
-
-Similarly to Aave, we also leverage Spark lending & borrowing functionalities for our application.
-
+**Arbitrum Sepolia Testnet:**
 ````
-Address: 0x80a8edca4F93ec506634F3D153FA32739b0251b9
+LoanContract : 0x9E7a4e8EF0A5F7949602e2Ff71dD0FFBC4F9Db91
+AssetProof : 0xf5a672774a53872e7C6773Aa04F41a7F6c37e327
 ````
 
-**WalletConnect**
+**Scroll Asset**
+````
+scroll asset: 0x5f3f1dBD7B74C6B46e8c44f98792A1dAf8d69154
+````
 
-**Push Protocol**
-
-**Mask Network**
-
-Next ID from Mask Network facilitates the use of multiple off-chain social network profiles, in conjunction with on-chain profiles, as collateral for borrowing.
-    
 ## Application Architecture
 
 *Social Credit Scoring*
