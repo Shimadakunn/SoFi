@@ -3,6 +3,7 @@ const repudable_badges = require("./reputableBadges");
 const express = require("express");
 const app = express();
 const { LensClient, production } = require("@lens-protocol/client");
+const getENSValuation = require("./ENSValuation");
 
 const lensClient = new LensClient({
   environment: production
@@ -100,9 +101,8 @@ app.get('/check-lilgho-follow', async (req, res) => {
   res.send({ followings: followings.sort(), isFollowedByStani });
 })
 
-app.get('/check-ens-and-ens-profile-ownership', async (req, res) => {
-  const { address } = req.query;
-  if(!address) return res.send({error: 'No address provided'})
+const check_ens_and_lens_ownership = async (address) => {
+  if(!address) throw new Error('No address provided');
 
   const response = await fetch(`https://api.web3.bio/profile/${address}`);
 
@@ -118,8 +118,33 @@ app.get('/check-ens-and-ens-profile-ownership', async (req, res) => {
     lens: have_lens ? lens[0].identity : null,
   }
 
+  return send_data;
+}
+
+app.get('/get-address-max-borrow-amount', async (req, res) => {
+  const { address } = req.query;
+  if(!address) return res.send({error: 'No address provided'})
+
+  console.log({address})
+
+  const { have_ens, have_lens, ens, lens} = await check_ens_and_lens_ownership(address);
+
+  let ens_valuation = 0;
+  let lens_valuation = 0;
+  
+  if(have_ens){
+    ens_valuation = getENSValuation(ens);
+  }
+
+  const MAX_TVL_FACTOR = 0.7;
+
+  const maxBorrowAmount = MAX_TVL_FACTOR * (ens_valuation + lens_valuation);
+  const send_data = {
+    maxBorrowAmount,
+  }
+
   console.log({send_data})
   res.send(send_data);
-})
+});
 
 app.listen(3001);
