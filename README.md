@@ -41,7 +41,7 @@ Failure to repay the loan triggers a soft ban, imposing the following restrictio
 - **Vouching Limit**: Restricts vouching capabilities (up to a maximum of 2 per wallet).
 
 ## Contributors
-- Solène Daviaud: [@sdav](https://github.com/sdav)
+- Solène Daviaud: [@sdaav](https://github.com/sdaav)
 - Nandy Bâ: [@nandyba](https://github.com/nandyba)
 - Léo Combaret: [shimadakunn](https://github.com/Shimadakunn)
 
