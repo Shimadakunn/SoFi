@@ -44,7 +44,8 @@ Failure to repay the loan triggers a soft ban, imposing the following restrictio
 - Solène Daviaud: [@sdaav](https://github.com/sdaav)
 - Nandy Bâ: [@nandyba](https://github.com/nandyba)
 - Léo Combaret: [shimadakunn](https://github.com/Shimadakunn)
-- Mathis Sergent: [mathbgn](https://github.com/mathbgn)
+- Mathias Bougon: [mathbgn](https://github.com/mathbgn)
+- Mathis Sergent: []()
 
 ## Deployed on
 
