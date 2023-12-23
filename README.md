@@ -40,6 +40,12 @@ Failure to repay the loan triggers a soft ban, imposing the following restrictio
 - **ENS**: Funds due to you are frozen in an escrow account, which then directs the funds to the lender.
 - **Vouching Limit**: Restricts vouching capabilities (up to a maximum of 2 per wallet).
 
+## Contributors
+- Solène Daviaud: [@sdaav](https://github.com/sdaav)
+- Nandy Bâ: [@nandyba](https://github.com/nandyba)
+- Léo Combaret: [@shimadakunn](https://github.com/Shimadakunn)
+- Mathias Bougon: [@mathbgn](https://github.com/mathbgn)
+- Mathis Sergent: [@mathissrgt](https://github.com/mathisrgt)
 
 ## Deployed on
 
