@@ -96,4 +96,12 @@ AssetProof : 0xc81c0D879650a41d0C7A1ff588df7e11A5BFFeC4
 *Sybil Resistant Vouching System*
 ![Banner](assets/Architecture_05.png)
 
+## Prizes won 🏆
 
+| Sponsors  | Prizes |
+| ------------- | ------------- |
+| Polygon  | Best use of Polygon zkEVM  |
+| Mask Network  | Best Use of Next.ID & Most Creative Project  |
+| Scroll  | Pool Prize  |
+| Arbitrum  | Pool Prize  |
+| Chiliz  | Pool Prize  |
